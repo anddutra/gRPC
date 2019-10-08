@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "gRPC_Movies";
+
+package Movie;
+
+service MovieSvc {
+  rpc GetMovies (MovieRequest) returns (MovieReply);
+}
+
+message MovieRequest {
+  string titleMovie = 1;
+}
+
+message MovieReply {
+  string resultMovies = 1;
+}

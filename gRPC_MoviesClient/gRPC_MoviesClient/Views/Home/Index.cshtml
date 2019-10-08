@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        td, th {
+            padding: 10px 5px !important;
+        }
+
+        th {
+            background-color: #DCDCDC !important;
+        }
+
+        .row{
+            margin-bottom: 0px !important;
+        }
+    </style>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnSearchMovie").click(function (e) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/SearchMovie",
+                    data: { title: $("#title").val() },
+                    success: function (response) {
+                        ShowResultMovies(response);
+                    },
+                    error: function () {
+                        $("#divResult").empty();
+                        $("#divResult").append("<p>Erro ao processar solicitação<p>");
+                    }
+                });
+            });
+        });
+
+        function ShowResultMovies(response) {
+            var movieResult = JSON.parse(response);
+
+            $("#divResult").empty();
+            $("#divResult").append("<p>Total de Filmes: " + movieResult.total + "<p>");
+
+            if (movieResult.total) {
+                var table = $("<table class='striped'>");
+                var thead = $("<thead>");
+                var tbody = $("<tbody>");
+                var tr;
+                var th;
+                var td;
+
+                tr = $("<tr>");
+                th = $("<th>");
+                th.html("Filmes");
+                tr.append(th);
+
+                th = $("<th>");
+                th.html("Ano");
+                tr.append(th);
+
+                thead.append(tr);
+                table.append(thead);
+
+                $.each(movieResult.moviesByYear, function (key, movie) {
+                    tr = $("<tr>");
+
+                    td = $("<td>");
+                    td.html(movie.movies)
+                    tr.append(td);
+
+                    td = $("<td>");
+                    td.html(movie.year)
+                    tr.append(td);
+
+                    tbody.append(tr);
+                });
+                table.append(tbody);
+                $("#divResult").append(table);
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="row">
+        <form class="col s12">
+            <div class="row">
+                <div class="input-field col s4">
+                    <input id="title" type="text">
+                    <label for="title">Informe o título de um filme</label>
+                </div>
+                <a id="btnSearchMovie" class="waves-effect waves-light btn col s2" style="margin-top:25px;">Buscar</a>
+            </div>
+
+            <div id="divResult" class="col s4">
+                <p id="total-movies"></p>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

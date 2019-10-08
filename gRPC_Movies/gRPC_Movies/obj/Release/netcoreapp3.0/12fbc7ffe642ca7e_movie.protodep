@@ -1,0 +1,2 @@
+obj\Release\netcoreapp3.0/Movie.cs \
+obj\Release\netcoreapp3.0/MovieGrpc.cs: Protos/movie.proto
