@@ -24,7 +24,7 @@ namespace gRPC_Movies.Test
         }
 
         [Fact]
-        public void TestMockTotalMovies()
+        public void TestMockMovies()
         {
             SearchMovie searchMovie = new SearchMovie();
             searchMovie.page = 1;

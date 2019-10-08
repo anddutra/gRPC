@@ -1,10 +1,6 @@
 ﻿using gRPC_Movies.Models;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace gRPC_Movies.Repository
 {

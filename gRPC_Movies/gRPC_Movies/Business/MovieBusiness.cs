@@ -3,7 +3,7 @@ using gRPC_Movies.Repository;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace gRPC_Movies.Business
@@ -35,7 +35,15 @@ namespace gRPC_Movies.Business
 
                     await Task.WhenAll(lTasks);
 
-                    ResultMovie resultMovies = new ResultMovie(_moviesByYear, searchMovie.total);
+                    ResultMovie resultMovies = new ResultMovie
+                    {
+                        total = searchMovie.total,
+                        moviesByYear = _moviesByYear.GroupBy(x => x.year)
+                        .Select(g => new MovieByYear { year = g.Key, movies = g.Count() })
+                        .OrderBy(y => y.year)
+                        .ToList()
+                    };
+
                     return JsonConvert.SerializeObject(resultMovies);
                 }
             }
