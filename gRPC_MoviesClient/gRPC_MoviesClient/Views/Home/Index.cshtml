@@ -21,6 +21,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#btnSearchMovie").click(function (e) {
+                $("#divResult").empty();
                 $.ajax({
                     type: "POST",
                     url: "/Home/SearchMovie",

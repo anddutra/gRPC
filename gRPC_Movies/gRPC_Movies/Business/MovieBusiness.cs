@@ -11,8 +11,6 @@ namespace gRPC_Movies.Business
     public class MovieBusiness
     {
         IRepositoryMovies _repository;
-        private List<MovieByYear> _moviesByYear = new List<MovieByYear>();
-
         public MovieBusiness(IRepositoryMovies repository)
         {
             _repository = repository;
@@ -22,23 +20,30 @@ namespace gRPC_Movies.Business
         {
             try
             {
-                SearchMovie searchMovie = _repository.ReturnMovies(title, 0);
+                SearchMovie searchMovie = _repository.ReturnMovies(title);
 
                 if (searchMovie != null)
                 {
-                    foreach (DetailMovie mov in searchMovie.data)
-                        _moviesByYear.Add(new MovieByYear { year = mov.year });
-
                     var lTasks = new List<Task>();
                     for (int page = 2; page <= searchMovie.total_pages; page++)
                         lTasks.Add(ReturnTasks(title, page));
 
                     await Task.WhenAll(lTasks);
 
+                    List<MovieByYear> moviesByYear = new List<MovieByYear>();
+                    moviesByYear.AddRange(searchMovie.data
+                        .Select(x => new MovieByYear { year = x.year }));
+
+                    lTasks.ForEach(x =>
+                    {
+                        moviesByYear.AddRange(((Task<List<DetailMovie>>)x).Result
+                            .Select(m => new MovieByYear { year = m.year }));
+                    });
+
                     ResultMovie resultMovies = new ResultMovie
                     {
-                        total = searchMovie.total,
-                        moviesByYear = _moviesByYear.GroupBy(x => x.year)
+                        total = moviesByYear.Count(),
+                        moviesByYear = moviesByYear.GroupBy(x => x.year)
                         .Select(g => new MovieByYear { year = g.Key, movies = g.Count() })
                         .OrderBy(y => y.year)
                         .ToList()
@@ -60,21 +65,16 @@ namespace gRPC_Movies.Business
             return Task.Run(() => { return ReturnMoviesByPage(title, page); });
         }
 
-        private async Task ReturnMoviesByPage(string title, int page)
+        private Task<List<DetailMovie>> ReturnMoviesByPage(string title, int page)
         {
             try
             {
-                SearchMovie searchMovie = _repository.ReturnMovies(title, page);
-
-                if (searchMovie != null)
-                {
-                    foreach (DetailMovie mov in searchMovie.data)
-                        _moviesByYear.Add(new MovieByYear { year = mov.year });
-                }
+                return _repository.ReturnMoviesByPage(title, page);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return null;
             }
         }
     }

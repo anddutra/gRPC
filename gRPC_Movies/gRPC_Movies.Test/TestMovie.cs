@@ -32,19 +32,19 @@ namespace gRPC_Movies.Test
             searchMovie.total = 9;
             searchMovie.total_pages = 1;
             List<DetailMovie> data = new List<DetailMovie>();
-            data.Add(new DetailMovie { title = "MovieTest", imdbID = "xxxxx", year = 2019 });
-            data.Add(new DetailMovie { title = "MovieTest", imdbID = "xxxxx", year = 2017 });
-            data.Add(new DetailMovie { title = "MovieTest", imdbID = "xxxxx", year = 2012 });
-            data.Add(new DetailMovie { title = "MovieTest", imdbID = "xxxxx", year = 2019 });
-            data.Add(new DetailMovie { title = "MovieTest", imdbID = "xxxxx", year = 2017 });
-            data.Add(new DetailMovie { title = "MovieTest", imdbID = "xxxxx", year = 2017 });
-            data.Add(new DetailMovie { title = "MovieTest", imdbID = "xxxxx", year = 2012 });
-            data.Add(new DetailMovie { title = "MovieTest", imdbID = "xxxxx", year = 2019 });
-            data.Add(new DetailMovie { title = "MovieTest", imdbID = "xxxxx", year = 2017 });
+            data.Add(new DetailMovie { title = "MovieTest", imdbID = "tt0114898", year = 2019 });
+            data.Add(new DetailMovie { title = "MovieTest", imdbID = "tt0189200", year = 2017 });
+            data.Add(new DetailMovie { title = "MovieTest", imdbID = "tt2670548", year = 2012 });
+            data.Add(new DetailMovie { title = "MovieTest", imdbID = "tt0161077", year = 2019 });
+            data.Add(new DetailMovie { title = "MovieTest", imdbID = "tt0455840", year = 2017 });
+            data.Add(new DetailMovie { title = "MovieTest", imdbID = "tt0390617", year = 2017 });
+            data.Add(new DetailMovie { title = "MovieTest", imdbID = "tt5847056", year = 2012 });
+            data.Add(new DetailMovie { title = "MovieTest", imdbID = "tt0298417", year = 2019 });
+            data.Add(new DetailMovie { title = "MovieTest", imdbID = "tt0381702", year = 2017 });
             searchMovie.data = data;
 
             var mockRepository = new Mock<IRepositoryMovies>();
-            mockRepository.Setup(x => x.ReturnMovies(string.Empty, 0)).Returns(searchMovie);
+            mockRepository.Setup(x => x.ReturnMovies(string.Empty)).Returns(searchMovie);
             var movie = new MovieBusiness(mockRepository.Object);
             var json = movie.ReturnMovies(string.Empty);
 
