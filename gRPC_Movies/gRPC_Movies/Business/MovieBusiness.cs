@@ -57,7 +57,7 @@ namespace gRPC_Movies.Business
                 Console.WriteLine(ex.Message);
             }
 
-            return "Erro ao processar solicitação";
+            return "Error processing request";
         }
 
         private Task ReturnTasks(string title, int page)

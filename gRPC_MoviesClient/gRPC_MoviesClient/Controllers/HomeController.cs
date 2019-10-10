@@ -21,7 +21,7 @@ namespace gRPC_MoviesClient.Controllers
         }
 
         [HttpPost]
-        public async Task<string> SearchMovieAsync(string title)
+        public async Task<string> SearchMovie(string title)
         {
             var channel = GrpcChannel.ForAddress("https://localhost:5001");
             var client = new MovieSvc.MovieSvcClient(channel);
