@@ -37,13 +37,12 @@
             });
         });
 
-        function ShowResultMovies(response) {
-            var movieResult = JSON.parse(response);
+        function ShowResultMovies(movieResult) {
 
             $("#divResult").empty();
             $("#divResult").append("<p>Total de Filmes: " + movieResult.total + "<p>");
 
-            if (movieResult.total) {
+            if (movieResult.total > 0) {
                 var table = $("<table class='striped'>");
                 var thead = $("<thead>");
                 var tbody = $("<tbody>");

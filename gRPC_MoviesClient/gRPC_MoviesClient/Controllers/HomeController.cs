@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Grpc.Net.Client;
 using gRPC_Movies;
 using Microsoft.AspNetCore.Mvc;
@@ -21,14 +22,15 @@ namespace gRPC_MoviesClient.Controllers
         }
 
         [HttpPost]
-        public async Task<string> SearchMovie(string title)
+        public async Task<Movies> SearchMovie(string title)
         {
-            var channel = GrpcChannel.ForAddress("https://localhost:5001");
-            var client = new MovieSvc.MovieSvcClient(channel);
-            var reply = await client.GetMoviesAsync(
-                              new MovieRequest { TitleMovie = title != null ? title : string.Empty });
+            using var channel = GrpcChannel.ForAddress("https://localhost:5001");
+            var client = new Movie.MovieClient(channel);
+            title = String.IsNullOrEmpty(title) ? string.Empty : title;
+            var reply = await client.GetMoviesByTitleAsync(
+                              new NameMovie { Name = title });
             
-            return reply.ResultMovies.ToString();
+            return reply;
         }
     }
 }

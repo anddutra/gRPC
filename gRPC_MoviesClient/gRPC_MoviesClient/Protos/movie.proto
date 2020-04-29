@@ -4,14 +4,20 @@ option csharp_namespace = "gRPC_Movies";
 
 package Movie;
 
-service MovieSvc {
-  rpc GetMovies (MovieRequest) returns (MovieReply);
+service Movie {
+ rpc GetMoviesByTitle (NameMovie) returns (Movies) {};
 }
 
-message MovieRequest {
-  string titleMovie = 1;
+message NameMovie {
+  string name = 1;
 }
 
-message MovieReply {
-  string resultMovies = 1;
+message MoviesByYear {
+  int32 year = 1;
+  int32 movies = 2;
+}
+ 
+message Movies{
+  repeated MoviesByYear moviesByYear = 1;
+  int32 total = 2;
 }
