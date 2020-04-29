@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using gRPC_Movies.GRPC;
+using gRPC_Movies.Repository;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace gRPC_Movies
 {
@@ -13,6 +16,9 @@ namespace gRPC_Movies
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
+            services.AddScoped<MoviesService>();
+            services.AddScoped<IMoviesRepository, MoviesRepository>();
+            services.AddHttpClient("movies", _ => _.BaseAddress = new Uri(@"https://jsonmock.hackerrank.com"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -27,7 +33,7 @@ namespace gRPC_Movies
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<MovieService>();
+                endpoints.MapGrpcService<MovieGRPC>();
 
                 endpoints.MapGet("/", async context =>
                 {
